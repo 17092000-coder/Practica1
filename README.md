@@ -1,6 +1,5 @@
-
 # alan omar rodriguez ignacio
-## 3-d
+## 4-d
 ## 24308060610086@cetis61.edu.mx
 ## programacion 
-![alt text](image.png)
+<img width="160" height="160" alt="image" src="https://github.com/user-attachments/assets/8aa2a2d3-7714-4fe6-83e1-4d88fcd9e4ec" />
