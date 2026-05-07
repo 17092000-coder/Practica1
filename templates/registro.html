@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="col-md-4 mx-auto">
+<div class= "text-center">
+<h3>Registro</h3>
+</div>
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<form method="POST">
+
+    <input class="form-control mb-2" name="nombre" placeholder="Nombre">
+
+    <input class="form-control mb-2" name="email" placeholder="Correo">
+
+    <input class="form-control mb-2" type="password" name="password" placeholder="Contraseña">
+
+    <input class="form-control mb-2" type="password" name="confirm_password" placeholder="Repetir contraseña">
+
+    <button class="btn btn-success w-100">Registrar</button>
+    
+    <a href="{{ url_for('inicio') }}" class="btn btn-secondary mt-2">
+    Volver al login
+    </a>
+
+</form>
+</div>
+
+{% endblock %}

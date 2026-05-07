@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h3 class="mb-4 text-white fw-bold">
+        Editar tarea
+    </h3>
+
+    <!-- FORMULARIO -->
+    <form method="POST" class="card p-4 shadow border-0 bg-secondary text-white">
+
+        <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input 
+                type="text" 
+                name="titulo" 
+                class="form-control"
+                value="{{ tarea.titulo }}"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea 
+                name="descripcion" 
+                class="form-control"
+                rows="4"
+                required
+            >{{ tarea.descripcion }}</textarea>
+        </div>
+
+        <button class="btn btn-primary w-100 fw-bold">
+            Guardar cambios
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('panel') }}" class="btn btn-outline-light mt-3">
+        Volver
+    </a>
+
+</div>
+
+{% endblock %}
