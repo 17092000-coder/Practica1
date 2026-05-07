@@ -1,152 +1,92 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class="container mt-4">
-
-    <h3 class="mb-4 text-white fw-bold">
-        Agregar nueva tarea
-    </h3>
-
-    <!-- FORMULARIO (MISMO ESTILO GRIS QUE TU FONDO) -->
-    <form method="POST" class="card p-4 mb-4 shadow border-0 bg-secondary text-white">
-
-        <div class="mb-2">
-            <input type="text" name="titulo" class="form-control" placeholder="Título de la tarea" required>
-        </div>
-
-        <div class="mb-2">
-            <textarea name="descripcion" class="form-control" placeholder="Descripción" required></textarea>
-        </div>
-
-        <div class="mb-2">
-            <label class="form-label">Fecha límite</label>
-            <input type="date" name="fecha_limite" class="form-control">
-        </div>
-
-        <button class="btn btn-success w-100 fw-bold">
-            Agregar tarea
-        </button>
-
-    </form>
-
-    <h3 class="mb-4 text-white fw-bold">
-        Mis tareas
-    </h3>
-
-    {% for t in pendientes + completadas + canceladas %}
-
-    <div class="card mb-3 shadow border-0 bg-dark text-white">
-
-        <div class="card-body">
-
-            <div class="d-flex justify-content-between align-items-center">
-
-                <h5 class="fw-bold">
-                    {{ t.titulo }}
-                </h5>
-
-                {% if t.estado == 'pendiente' %}
-                <span class="badge bg-warning text-dark">Pendiente</span>
-
-                {% elif t.estado == 'completada' %}
-                <span class="badge bg-success">Completada</span>
-
-                {% elif t.estado == 'cancelada' %}
-                <span class="badge bg-danger">Cancelada</span>
-
-                {% else %}
-                <span class="badge bg-secondary">{{ t.estado }}</span>
-                {% endif %}
-
+    <h2 class="text-white fw-bold mb-4">Bienvenido, {{ usuario }}</h2>
+    
+    
+    <div class="card bg-secondary text-white p-4 mb-5 border-0 shadow">
+        <h4 class="mb-3">Nueva Actividad</h4>
+        <form method="POST">
+            <div class="mb-2">
+                <input type="text" name="titulo" class="form-control" placeholder="Título" required>
             </div>
-
-            <p class="text-light mt-2">
-                {{ t.descripcion }}
-            </p>
-
-            <small class="text-light">
-                Fecha de inicio:
-                {{ t.fecha_creacion.strftime('%d/%m/%Y') }}
-            </small>
-
-            <br>
-
-            <small class="text-danger">
-                Fecha de entrega:
-                {% if t.fecha_limite %}
-                {{ t.fecha_limite.strftime('%d/%m/%Y') }}
-                {% else %}
-                Sin fecha
-                {% endif %}
-            </small>
-
-            {% if t.estado == 'cancelada' %}
-            <div class="alert alert-danger mt-3 p-2">
-                <strong>Motivo:</strong>
-                {{ t.motivo }}
+            <div class="mb-2">
+                <textarea name="descripcion" class="form-control" placeholder="Descripción"></textarea>
             </div>
-            {% endif %}
-
-            <div class="mt-3 d-flex gap-2 flex-wrap">
-
-                {% if t.estado != 'completada' and t.estado != 'cancelada' %}
-
-                <form method="POST" action="/cambiar_estado/{{ t._id }}">
-
-                    <form method="POST" action="/cambiar_estado/{{ t._id }}">
-                        <select name="estado" class="form-select mb-2">
-                            <option value="pendiente" {% if t.estado=='pendiente' %}selected{% endif %}>
-                                Pendiente
-                            </option>
-                            <option value="en_progreso" {% if t.estado=='en_progreso' %}selected{% endif %}>
-                                En progreso
-                            </option>
-                            <option value="completada" {% if t.estado=='completada' %}selected{% endif %}>
-                                Completada
-                            </option>
-                        </select>
-
-                        <button class="btn btn-primary btn-sm">
-                            Actualizar Estado
-                        </button>
-                    </form>
-                
-
-                </form>
-
-                <form method="POST" action="/cancelar/{{ t._id }}">
-
-                    <input type="text" name="motivo" class="form-control mb-2" placeholder="Motivo de cancelación"
-                        required>
-
-
-                    <button class="btn btn-danger btn-sm">
-                        Cancelar
-                    </button>
-
-                </form>
-
-                {% endif %}
-
-                <a href="/editar/{{ t._id }}" class="btn btn-outline-light btn-sm">
-                    Editar
-                </a>
-
-                <form method="POST" action="/borrar_tarea/{{ t._id }}">
-                    <button class="btn btn-danger btn-sm">
-                        Eliminar
-                    </button>
-                </form>
-
+            <div class="mb-3">
+                <label class="form-label">Fecha Límite</label>
+                <input type="date" name="fecha_limite" class="form-control">
             </div>
-
-        </div>
-
+            <button class="btn btn-success w-100 fw-bold">Guardar Tarea</button>
+        </form>
     </div>
 
+    <h3 class="mb-4 text-white">Mis Tareas</h3>
+
+    {% for t in pendientes + completadas + canceladas %}
+    <div class="card mb-3 shadow border-0 bg-dark text-white">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">{{ t.titulo }}</h5>
+                
+               
+                <div>
+                    {% if t.estado == 'pendiente' %}
+                        <span class="badge bg-warning text-dark">Pendiente</span>
+                    {% elif t.estado == 'en_progreso' %}
+                        <span class="badge bg-info text-dark">En progreso</span>
+                    {% elif t.estado == 'completada' %}
+                        <span class="badge bg-success">Completada</span>
+                    {% elif t.estado == 'cancelada' %}
+                        <span class="badge bg-danger">Cancelada</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <p class="text-light mt-3">{{ t.descripcion }}</p>
+            <div class="small text-muted mb-3">
+                <span><i class="bi bi-calendar-plus"></i> Creada: {{ t.fecha_creacion.strftime('%d/%m/%Y') }}</span> | 
+                <span class="text-danger"><i class="bi bi-calendar-x"></i> Límite: {{ t.fecha_limite.strftime('%d/%m/%Y') if t.fecha_limite else 'S/N' }}</span>
+            </div>
+
+            {% if t.estado == 'cancelada' and t.motivo %}
+            <div class="alert alert-danger py-1 px-2 small"><strong>Motivo:</strong> {{ t.motivo }}</div>
+            {% endif %}
+
+            <hr class="border-secondary">
+
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                
+                {% if t.estado != 'completada' and t.estado != 'cancelada' %}
+                
+                <form method="POST" action="/cambiar_estado/{{ t._id }}" class="d-flex gap-1">
+                    <select name="estado" class="form-select form-select-sm bg-dark text-white border-secondary">
+                        <option value="pendiente" {% if t.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="en_progreso" {% if t.estado == 'en_progreso' %}selected{% endif %}>En progreso</option>
+                        <option value="completada" {% if t.estado == 'completada' %}selected{% endif %}>Completada</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm">Actualizar</button>
+                </form>
+
+                
+                <form method="POST" action="/cancelar/{{ t._id }}" class="d-flex gap-1">
+                    <input type="text" name="motivo" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Motivo" required style="width: 130px;">
+                    <button class="btn btn-danger btn-sm">Cancelar</button>
+                </form>
+                {% endif %}
+
+                
+                <div class="ms-auto d-flex gap-2">
+                    <a href="/editar/{{ t._id }}" class="btn btn-outline-light btn-sm">Editar</a>
+                    <form method="POST" action="/borrar_tarea/{{ t._id }}">
+                        <button class="btn btn-danger btn-sm">Borrar</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
     {% endfor %}
-
 </div>
-
 {% endblock %}
